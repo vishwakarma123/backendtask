@@ -1,0 +1,44 @@
+# Disable directory browsing
+Options -Indexes
+
+# Turn on the rewrite engine
+RewriteEngine On
+
+# Ensure .htaccess file is not accessible
+RewriteRule ^\.htaccess$ - [F]
+
+# Rewrite base to point to the project root (adjust if necessary)
+RewriteBase / 
+
+# Removes "index.php" from the URL (Enabling clean URLs)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+# Prevent direct access to sensitive directories
+
+# Block access to system folder
+RewriteRule ^system/ - [F,L]
+
+# Block access to application folder
+RewriteRule ^application/ - [F,L]
+
+# Block access to user_guide folder (if present)
+RewriteRule ^user_guide/ - [F,L]
+
+# Block access to any hidden files (starting with .)
+RewriteRule ^\. - [F,L]
+
+# Prevent direct access to certain files (if needed)
+RewriteRule ^(index|favicon)\.php$ - [F,L]
+
+# Block access to files like config.php, database.php
+RewriteRule ^application/config/.*\.php$ - [F,L]
+
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+</IfModule>
+
+
